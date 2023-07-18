@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+</head><body>
+<h1>福井県観光AIアドバイス</h1>
+<select id=selarea></select><br>
+解析期間: <span id=divduring></span><br>
+
+<main id=main></main>
+<hr>
+API: <a href=https://openai.com/>OpenAI API (GPT-4)</a><br>
+src on GitHub<br>
+
+
+<script type="module">
+import { CSV } from "https://js.sabae.cc/CSV.js";
+
+const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
+const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
+console.log(areas); 
+for (const area of areas) {
+  const opt = document.createElement("option");
+  opt.textContent = area.市町名 + " / " + area.エリア名;
+  opt.value = area.id;
+  selarea.appendChild(opt);
+}
+selarea.oninput = () => location.hash = "#" + selarea.value;
+
+const data = await (await fetch("advice.json")).json();
+const d = data[0];
+console.log(d);
+divduring.innerHTML = d.startday + "〜" + d.endday;
+for (const d of data) {
+  const div = document.createElement("div");
+  const id = areas.find(a => a.エリア名 == d.area).id;
+  div.innerHTML = `
+<a id="${id}"><h2>${d.area}</h2></a><a href=https://code4fukui.github.io/fukui-kanko-stat/comment.html#${id},0,0,0>アンケート回答件数: ${d.n_data}</a><br>
+<div class=advice>${d.advice}</div>
+`;
+  main.appendChild(div);
+}
+</script>
+
+<style>
+body {
+  background-color: #f8faf8;
+  margin: .5em;
+}
+main h2 {
+  display: inline-block;
+  padding-bottom: .3em;
+  padding-right: 1em;
+}
+main > div {
+  margin: .5em;
+  padding: .9em;
+  background-color: #e8efe8;
+}
+.advice {
+  white-space: pre-wrap;
+}
+</style>
