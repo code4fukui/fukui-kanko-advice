@@ -8,6 +8,7 @@ console.log(areas);
 
 const data0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/all.csv");
 const start = new Day().dayBefore(7);
+const endday = new Day().dayBefore(1).toString();
 
 const data1 = data0.filter(d => new Day(d.回答日時).isAfter(start));
 console.log(data0[0]);
@@ -20,7 +21,7 @@ for (const area of areas) {
       area: area.エリア名,
       n_data: data.length,
       startday: start.toString(),
-      endday: new Day().dayBefore(1).toString(),
+      endday,
       advice: "",
     });
 
@@ -30,9 +31,14 @@ for (const area of areas) {
       area: area.エリア名,
       n_data: data.length,
       startday: start.toString(),
-      endday: new Day().dayBefore(1).toString(),
+      endday,
       advice: res,
     });
   }
 }
-await Deno.writeTextFile("advice.json", JSON.stringify(list, null, 2));
+
+const json = JSON.stringify(list, null, 2);
+await Deno.writeTextFile("advice.json", json);
+await Deno.writeTextFile("data/advice-" + endday.toString(), json);
+
+await import("./makeList.js");
