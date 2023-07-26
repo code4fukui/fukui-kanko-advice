@@ -2,13 +2,15 @@ import { CSV } from "https://js.sabae.cc/CSV.js";
 import { fetchKankoAdvice } from "./fetchKankoAdvice.js";
 import { Day } from "https://js.sabae.cc/DateTime.js";
 
+const offset = 1; // 0: normal
+
 const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
 const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
 console.log(areas);
 
 const data0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/all.csv");
-const start = new Day().dayBefore(7);
-const endday = new Day().dayBefore(1).toString();
+const start = new Day().dayBefore(7 + offset);
+const endday = new Day().dayBefore(1 + offset).toString();
 
 const data1 = data0.filter(d => new Day(d.回答日時).isAfter(start));
 console.log(data0[0]);
@@ -35,10 +37,8 @@ for (const area of areas) {
       advice: res,
     });
   }
+  const json = JSON.stringify(list, null, 2);
+  await Deno.writeTextFile("advice.json", json);
+  await Deno.writeTextFile("data/advice-" + endday.toString() + ".json", json);
+  await import("./makeList.js");
 }
-
-const json = JSON.stringify(list, null, 2);
-await Deno.writeTextFile("advice.json", json);
-await Deno.writeTextFile("data/advice-" + endday.toString(), json);
-
-await import("./makeList.js");
