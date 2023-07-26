@@ -26,7 +26,7 @@ for (const area of areas) {
   </head><body>
   <h1>${title}</h1>
 
-  ${res.join("\n")}
+  <main id=main>${res.join("\n")}</main>
   <hr>
   Data: <a href=https://github.com/code4fukui/fukui-kanko-survey>FTASオープンデータ CC BY 福井県観光連盟</a><br>
   API: <a href=https://openai.com/>OpenAI API</a><br>
