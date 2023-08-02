@@ -2,7 +2,8 @@ import { CSV } from "https://js.sabae.cc/CSV.js";
 import { fetchKankoAdvice } from "./fetchKankoAdvice.js";
 import { Day } from "https://js.sabae.cc/DateTime.js";
 
-const offset = 1; // 0: normal
+//const offset = 1; // run on Thusday
+const offset = 0; // run on Wednesday
 
 const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
 const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
@@ -42,3 +43,4 @@ for (const area of areas) {
   await Deno.writeTextFile("data/advice-" + endday.toString() + ".json", json);
   await import("./makeList.js");
 }
+await import("./makeHTML.js");

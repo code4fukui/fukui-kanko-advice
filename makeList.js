@@ -12,4 +12,5 @@ for (const fn of ss) {
     endday: d.endday,
   });
 }
+list.sort((a, b) => a.startday.localeCompare(b.startday));
 await Deno.writeTextFile("advice-list.json", JSON.stringify(list, null, 2));

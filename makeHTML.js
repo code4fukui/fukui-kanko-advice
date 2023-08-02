@@ -1,6 +1,7 @@
 import { CSV } from "https://js.sabae.cc/CSV.js";
 
 const list = await (await fetch(new URL("./advice-list.json", import.meta.url))).json();
+list.reverse();
 for (const item of list) {
   item.data = await (await fetch(new URL(item.fn, import.meta.url))).json();
 }
@@ -20,11 +21,11 @@ for (const area of areas) {
       <div class=advice>${d.advice}</div>`);
     }
   }
-  const title = "福井県AI観光アドバイス - " + area.エリア名;
+  const title = "福井県AI観光アドバイス"; //  - " + area.エリア名;
   const template = `<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
   <title>${title}</title>
   </head><body>
-  <h1>${title}</h1>
+  <h1><a href=../>${title}</a></h1>
 
   <main id=main>${res.join("\n")}</main>
   <hr>
@@ -38,9 +39,12 @@ for (const area of areas) {
     margin: .5em;
   }
   main h2 {
-    display: inline-block;
+    x-display: inline-block;
     padding-bottom: .3em;
     padding-right: 1em;
+  }
+  h3 {
+    display: inline-block;
   }
   main > div {
     margin: .5em;

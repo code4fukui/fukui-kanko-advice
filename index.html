@@ -33,6 +33,7 @@ for (const item of list) {
   opt.value = item.fn;
   selduring.appendChild(opt);
 }
+selduring.selectedIndex = selduring.length - 1;
 
 const show = async () => {
   const fn = selduring.value;
