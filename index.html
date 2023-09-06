@@ -1,23 +1,41 @@
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
 <title>福井県観光AIアドバイス</title>
 </head><body>
-<h1>福井県観光AIアドバイス</h1>
-<select id=selarea></select><br>
+<h1 id=h1>福井県観光AIアドバイス</h1>
+<a id=h1cap></a>
+<header>
+<div id=divarea></div>
+観光地: <select id=selarea></select>
 解析期間: <select id=selduring></select><br>
+</header>
 
 <main id=main></main>
+
+<footer>
 <hr>
+Related: <a href=https://code4fukui.github.io/fukui-kanko-stat/>福井県観光アンケート分析アプリ</a><br>
 Data: <a href=https://github.com/code4fukui/fukui-kanko-survey>FTASオープンデータ CC BY 福井県観光連盟</a><br>
 API: <a href=https://openai.com/>OpenAI API</a><br>
 <a href=https://github.com/code4fukui/fukui-kanko-advice/>src on GitHub<br>
+</footer>
 
 
 <script type="module">
 import { CSV } from "https://js.sabae.cc/CSV.js";
+import { ArrayUtil } from "https://js.sabae.cc/ArrayUtil.js";
+import { Find47 } from "https://code4fukui.github.io/find47/Find47.js";
+//import { Find47 } from "./Find47.js";
 
 const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
 const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
-console.log(areas); 
+//console.log(areas); 
+const cities = ArrayUtil.toUnique(areas.map(a => a.市町名));
+for (const city of cities) {
+  const a = document.createElement("a");
+  a.href = "#" + city;
+  a.textContent = city;
+  divarea.appendChild(a);
+}
 for (const area of areas) {
   const opt = document.createElement("option");
   opt.textContent = area.市町名 + " / " + area.エリア名;
@@ -25,6 +43,17 @@ for (const area of areas) {
   selarea.appendChild(opt);
 }
 selarea.oninput = () => location.hash = "#" + selarea.value;
+
+const setbg = () => {
+  Find47.getImage("福井県").then(img => {
+    h1.style.backgroundImage = `url(${img.url_image})`;
+    console.log(img)
+    h1cap.textContent = `${img.title} CC BY ${img.author} from FIND/47`;
+    h1cap.href = img.url;
+  });
+};
+setbg();
+h1.onclick = () => setbg();
 
 const list = await (await fetch("./advice-list.json")).json();
 for (const item of list) {
@@ -40,13 +69,23 @@ const show = async () => {
   const data = await (await fetch(fn)).json();
   const d = data[0];
   main.innerHTML = "";
-  console.log(d);
+  //console.log(d);
   //divduring.innerHTML = d.startday + "〜" + d.endday;
+  let citybk = null;
   for (const d of data) {
     const div = document.createElement("div");
-    const id = areas.find(a => a.エリア名 == d.area).id;
+    const area = areas.find(a => a.エリア名 == d.area);
+    const id = area.id;
+    const city = area.市町名;
+    if (citybk != city) {
+      const h2 = document.createElement("h2");
+      h2.innerHTML = `<a id=${city} href=#${city}>${city} 観光AIアドバイス</a>`;
+      main.appendChild(h2);
+      citybk = city;
+    }
     div.innerHTML = `
-  <a id="${id}" href=area/${id}.html><h2>${d.area}</h2></a><a href=https://code4fukui.github.io/fukui-kanko-stat/comment.html#${id},0,0,0>アンケート回答件数: ${d.n_data}</a><br>
+  <a id="${id}" href=area/${id}.html><h2>${d.area}</h2></a>
+  <a href=https://code4fukui.github.io/fukui-kanko-stat/comment.html#${id},0,0,0>期間内のアンケート件数: ${d.n_data}</a><br>
   <div class=advice>${d.advice}</div>
   `;
     main.appendChild(div);
@@ -59,7 +98,49 @@ selduring.onchange = () => show();
 <style>
 body {
   background-color: #f8faf8;
-  margin: .5em;
+  margin: 0;
+}
+h1 {
+  text-align: center;
+  font-size: 250%;
+  padding: 2em;
+  margin: 0;
+  background-position: 0% center;
+  background-size: 150% auto;
+  color: black;
+  text-shadow:1px 1px 0 #FFF, -1px -1px 0 #FFF,
+              -1px 1px 0 #FFF, 1px -1px 0 #FFF,
+              0px 1px 0 #FFF,  0-1px 0 #FFF,
+              -1px 0 0 #FFF, 1px 0 0 #FFF;
+  animation: bgmove 30s infinite;
+  /*animation-timing-function: linear;*/
+  animation-timing-function: ease-in-out;
+}
+@keyframes bgmove {
+  from {
+    background-position: 50% center;
+  }
+  50% {
+    background-position: 0% center;
+  }
+  to {
+    background-position: 50% center;
+  }
+}
+#h1cap {
+  font-size: 80%;
+  display: block;
+  text-align: center;
+}
+header {
+  margin: 1.5em;
+  text-align: center;
+}
+footer {
+  margin: 1.5em;
+}
+main {
+  margin: 1em;
 }
 main h2 {
   display: inline-block;
@@ -73,5 +154,11 @@ main > div {
 }
 .advice {
   white-space: pre-wrap;
+}
+#divarea a {
+  margin-right: .5em;
+}
+a {
+  color: black !important;
 }
 </style>
