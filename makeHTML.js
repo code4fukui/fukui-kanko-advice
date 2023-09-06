@@ -54,6 +54,9 @@ for (const area of areas) {
   .advice {
     white-space: pre-wrap;
   }
+  a {
+    color: black !important;
+  }
   </style>
   </body></html>
   `;
