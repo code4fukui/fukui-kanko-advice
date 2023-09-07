@@ -28,7 +28,7 @@ import { Find47 } from "https://code4fukui.github.io/find47/Find47.js";
 
 const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
 const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
-//console.log(areas); 
+console.log(areas, areas.length);
 const cities = ArrayUtil.toUnique(areas.map(a => a.市町名));
 for (const city of cities) {
   const a = document.createElement("a");

@@ -13,12 +13,16 @@ for (const area of areas) {
   const res = [];
   res.push(`<h2>${area.市町名 + " / " + area.エリア名}</h2>`);
 
-  for (const item of list) {
+  //for (const item of list) {
+  for (let i = list.length - 1; i >= 0; i--) {
+    const item = list[i];
     const d = item.data.find(d => d.area == area.エリア名);
     if (d) {
-      res.push(`<h3>${d.startday}〜${d.endday}</h3>`);
-      res.push(`<a href=https://code4fukui.github.io/fukui-kanko-stat/comment.html#${area.id},0,0,0>アンケート回答件数: ${d.n_data}</a><br>
-      <div class=advice>${d.advice}</div>`);
+      res.push(
+        `<h3>${d.startday}〜${d.endday}</h3>
+        <a href=https://code4fukui.github.io/fukui-kanko-stat/comment.html#${area.id},0,0,0>アンケート回答件数: ${d.n_data}</a><br>
+        <div class=advice>${d.advice}</div>`
+      );
     }
   }
   const title = "福井県AI観光アドバイス"; //  - " + area.エリア名;
