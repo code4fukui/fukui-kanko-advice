@@ -43,5 +43,10 @@
     "fn": "data/advice-2023-09-12.json",
     "startday": "2023-09-06",
     "endday": "2023-09-12"
+  },
+  {
+    "fn": "data/advice-2023-09-19.json",
+    "startday": "2023-09-13",
+    "endday": "2023-09-19"
   }
 ]
