@@ -10,7 +10,8 @@ export const fetchKankoAdvice = async (data) => {
     ];
     console.log(data.length);
     //const res = await fetchConversation(messages); // GPT-4
-    const res = await fetchConversation(messages, null, true); // GPT-3.5
+    //const res = await fetchConversation(messages, null, true); // GPT-3.5
+    const res = await fetchConversation({ messages, model: "gpt-4-1106-preview" }, null, true); // use model
     console.log(res);
     //if (res.startsWith("error: This model's maximum context length")) {
     if (res.startsWith("error: ")) {
