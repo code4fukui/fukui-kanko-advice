@@ -2,11 +2,11 @@ import { CSV } from "https://js.sabae.cc/CSV.js";
 import { fetchKankoAdvice } from "./fetchKankoAdvice.js";
 import { Day } from "https://js.sabae.cc/DateTime.js";
 
-//const offset = 4; // run on Sunday
+const offset = 4; // run on Sunday
 //const offset = 3; // run on Saturday
 //const offset = 2; // run on Friday
 //const offset = 1; // run on Thusday
-const offset = 0; // run on Wednesday
+//const offset = 0; // run on Wednesday
 
 const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
 const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
