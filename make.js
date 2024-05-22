@@ -5,20 +5,25 @@ import { Day } from "https://js.sabae.cc/DateTime.js";
 //const offset = 4; // run on Sunday
 //const offset = 3; // run on Saturday
 //const offset = 2; // run on Friday
-const offset = 1; // run on Thusday
+//const offset = 1; // run on Thusday
 //const offset = 0; // run on Wednesday
+const offset = undefined;
+
+// use if offset == undefnied
+const startday = "2024-04-27";
+const endday = "2024-05-06";
 
 const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
 const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
 //console.log(areas);
 
 const data0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/all.csv");
-const start = new Day().dayBefore(7 + offset);
-const endday = new Day().dayBefore(1 + offset).toString();
+const start = offset !== undefined ? new Day().dayBefore(7 + offset) : new Day(startday);
+const end = offset !== undefined ? new Day().dayBefore(1 + offset).toString() : new Day(endday);
 
 let list = [];
 try {
-  list = JSON.parse(await Deno.readTextFile("data/advice-" + endday.toString() + ".json"));
+  list = JSON.parse(await Deno.readTextFile("data/advice-" + end.toString() + ".json"));
   //console.log(list);
 } catch (e) {
   console.log("not found");
@@ -40,7 +45,7 @@ for (const area of areas) {
       area: area.エリア名,
       n_data: data.length,
       startday: start.toString(),
-      endday,
+      endday: end.toString(),
       advice: "",
     });
 
@@ -50,13 +55,13 @@ for (const area of areas) {
       area: area.エリア名,
       n_data: data.length,
       startday: start.toString(),
-      endday,
+      endday: end.toString(),
       advice: res,
     });
   }
   const json = JSON.stringify(list, null, 2);
   await Deno.writeTextFile("advice.json", json);
-  await Deno.writeTextFile("data/advice-" + endday.toString() + ".json", json);
+  await Deno.writeTextFile("data/advice-" + end.toString() + ".json", json);
   await import("./makeList.js");
 }
 await import("./makeHTML.js");

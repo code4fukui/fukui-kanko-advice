@@ -148,5 +148,10 @@
     "fn": "data/advice-2024-04-09.json",
     "startday": "2024-04-03",
     "endday": "2024-04-09"
+  },
+  {
+    "fn": "data/advice-2024-05-06.json",
+    "startday": "2024-04-27",
+    "endday": "2024-05-06"
   }
 ]
