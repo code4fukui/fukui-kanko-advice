@@ -6,14 +6,14 @@ import { Day } from "https://js.sabae.cc/DateTime.js";
 //const offset = 5; // run on Monday
 //const offset = 4; // run on Sunday
 //const offset = 3; // run on Saturday
-const offset = 2; // run on Friday
+//const offset = 2; // run on Friday
 //const offset = 1; // run on Thusday
 //const offset = 0; // run on Wednesday
-//const offset = undefined;
+const offset = undefined;
 
 // use if offset == undefnied
-const startday = "2024-04-27";
-const endday = "2024-05-06";
+const startday = "2025-04-26";
+const endday = "2025-05-06";
 
 const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
 const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
@@ -31,7 +31,14 @@ try {
   console.log("not found");
 }
 
-const data1 = data0.filter(d => new Day(d.回答日時).isAfter(start));
+const data1 = data0.filter(d => {
+  try {
+    return new Day(d.回答日時).isAfter(start);
+  } catch (e) {
+    console.log(`illegal date: "${d.回答日時}"`);
+    return false;
+  }
+});
 //console.log(data0[0]);
 for (const area of areas) {
   const data = data1.filter(d => d.回答エリア == area.エリア名);
