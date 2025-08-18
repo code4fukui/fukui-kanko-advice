@@ -3,10 +3,10 @@ import { fetchKankoAdvice } from "./fetchKankoAdvice.js";
 import { Day } from "https://js.sabae.cc/DateTime.js";
 
 //const offset = 6; // run on Tuesday
-//const offset = 5; // run on Monday
+const offset = 5; // run on Monday
 //const offset = 4; // run on Sunday
 //const offset = 3; // run on Saturday
-const offset = 2; // run on Friday
+//const offset = 2; // run on Friday
 //const offset = 1; // run on Thusday
 //const offset = 0; // run on Wednesday
 //const offset = undefined;
