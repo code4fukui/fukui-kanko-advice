@@ -9,7 +9,7 @@ export const fetchKankoAdvice = async (data) => {
       { "role": "user", "content": "すぐに解決できる重要な改善点は何ですか？" },
     ];
     console.log(data.length);
-    const model = "gpt-5";
+    const model = "gpt-5.2";
     const res = await fetchConversation({ messages, model });
     //const res = await fetchConversation(messages); // GPT-4
     //const res = await fetchConversation(messages, null, true); // GPT-3.5

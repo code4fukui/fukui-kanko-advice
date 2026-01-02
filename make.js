@@ -7,16 +7,16 @@ import { Day } from "https://js.sabae.cc/DateTime.js";
 //const offset = 4; // run on Sunday
 //const offset = 3; // run on Saturday
 //const offset = 2; // run on Friday
-const offset = 1; // run on Thusday
+//const offset = 1; // run on Thusday
 //const offset = 0; // run on Wednesday
-//const offset = undefined; // for startday && endday
+const offset = undefined; // for startday && endday
 
 //const days = 7;
 const days = 14;
 
 // use if offset == undefnied
-const startday = "2025-09-01";
-const endday = "2025-09-17";
+const startday = "2025-12-01";
+const endday = "2025-12-31";
 
 const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
 const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
