@@ -15,8 +15,8 @@ const offset = undefined; // for startday && endday
 const days = 14;
 
 // use if offset == undefnied
-const startday = "2025-12-01";
-const endday = "2025-12-31";
+const startday = "2024-12-01";
+const endday = "2024-12-31";
 
 const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
 const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
