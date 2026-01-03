@@ -25,12 +25,12 @@ for (const area of areas) {
       );
     }
   }
-  const title = "福井県AI観光アドバイス"; //  - " + area.エリア名;
+  const title = "福井県AI観光アドバイス";
   const template = `<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
-  <title>${title}</title>
+  <title>${title} - ${area.市町名} / ${area.エリア名}</title>
   </head><body>
   <h1><a href=../>${title}</a></h1>
-  <script type="module" src="https://code4fukui.github.io/marke-down/mark-down.js"></script>
+  <script type="module" src="https://code4fukui.github.io/mark-down/mark-down.js"></script>
 
   <main id=main>${res.join("\n")}</main>
   <hr>
