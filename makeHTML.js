@@ -13,15 +13,15 @@ for (const area of areas) {
   const res = [];
   res.push(`<h2>${area.市町名 + " / " + area.エリア名}</h2>`);
 
-  //for (const item of list) {
-  for (let i = list.length - 1; i >= 0; i--) {
-    const item = list[i];
+  for (const item of list) { // 最新が先
+  //for (let i = list.length - 1; i >= 0; i--) { // 最新が後
+    //const item = list[i];
     const d = item.data.find(d => d.area == area.エリア名);
     if (d) {
       res.push(
         `<h3>${d.startday}〜${d.endday}</h3>
         <a href=https://code4fukui.github.io/fukui-kanko-stat/comment.html#${area.id},0,0,0>アンケート回答件数: ${d.n_data}</a><br>
-        <div class=advice>${d.advice}</div>`
+        <div class=advice><mark-down>${d.advice}</mark-down></div>`
       );
     }
   }
@@ -30,6 +30,7 @@ for (const area of areas) {
   <title>${title}</title>
   </head><body>
   <h1><a href=../>${title}</a></h1>
+  <script type="module" src="https://taisukef.github.io/marked_md/mark-down.js"></script>
 
   <main id=main>${res.join("\n")}</main>
   <hr>
@@ -52,10 +53,11 @@ for (const area of areas) {
   }
   main > div {
     margin: .5em;
-    padding: .9em;
-    background-color: #e8efe8;
+    border: 1px solid gray;
+    background-color: #f2f2f2;
   }
   .advice {
+    padding: .9em;
     white-space: pre-wrap;
   }
   a {

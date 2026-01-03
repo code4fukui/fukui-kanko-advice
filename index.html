@@ -1,5 +1,6 @@
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
 <title>福井県観光AIアドバイス</title>
+<script type="module" src="https://taisukef.github.io/marked_md/mark-down.js"></script>
 </head><body>
 <h1 id=h1>福井県観光AIアドバイス</h1>
 <a id=h1cap></a>
@@ -84,9 +85,11 @@ const show = async () => {
       citybk = city;
     }
     div.innerHTML = `
-  <a id="${id}" href=area/${id}.html><h2>${d.area}</h2></a>
-  <a href=https://code4fukui.github.io/fukui-kanko-stat/comment.html#${id},0,0,0>期間内のアンケート件数: ${d.n_data}</a><br>
-  <div class=advice>${d.advice}</div>
+  <div class=advice_header>
+    <a id="${id}" target=_blank href=area/${id}.html>${d.area}</a>
+    <a target=_blank href=https://code4fukui.github.io/fukui-kanko-stat/comment.html#${id},0,0,0>期間内のアンケート件数: ${d.n_data}</a>
+  </div>
+  <div class=advice><mark-down>${d.advice}</mark-down></div>
   `;
     main.appendChild(div);
   }
@@ -149,10 +152,17 @@ main h2 {
 }
 main > div {
   margin: .5em;
-  padding: .9em;
+  background-color: #f2f2f2;
+  border: 1px solid gray;
+}
+.advice_header {
+  padding: .4em .3em;
+  font-size: 110%;
   background-color: #e8efe8;
+  border-bottom: 1px solid gray;
 }
 .advice {
+  padding: .9em;
   white-space: pre-wrap;
 }
 #divarea a {
