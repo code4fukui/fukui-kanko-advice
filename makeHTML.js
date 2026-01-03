@@ -30,7 +30,7 @@ for (const area of areas) {
   <title>${title}</title>
   </head><body>
   <h1><a href=../>${title}</a></h1>
-  <script type="module" src="https://taisukef.github.io/marked_md/mark-down.js"></script>
+  <script type="module" src="https://code4fukui.github.io/marke-down/mark-down.js"></script>
 
   <main id=main>${res.join("\n")}</main>
   <hr>
