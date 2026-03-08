@@ -43,12 +43,11 @@ for (const area of areas) {
   opt.value = area.id;
   selarea.appendChild(opt);
 }
-selarea.oninput = () => location.hash = "#" + selarea.value;
+selarea.oninput = () => location.hash = "#area" + selarea.value;
 
 const setbg = () => {
   Find47.getImage("福井県").then(img => {
     h1.style.backgroundImage = `url(${img.url_image})`;
-    console.log(img)
     h1cap.textContent = `${img.title} CC BY ${img.author} from FIND/47`;
     h1cap.href = img.url;
   });
@@ -85,17 +84,31 @@ const show = async () => {
       citybk = city;
     }
     div.innerHTML = `
-  <div class=advice_header>
-    <a id="${id}" target=_blank href=area/${id}.html>${d.area}</a>
-    <a target=_blank href=https://code4fukui.github.io/fukui-kanko-stat/comment.html#${id},0,0,0>期間内のアンケート件数: ${d.n_data}</a>
+  <div class=advice_header id="area${id}">
+    <a target=_blank href=area/${id}.html>${d.area}</a>
+    <a target=_blank href=https://code4fukui.github.io/fukui-kanko-stat/comment.html#${id},0,0,0>${selduring.children[selduring.selectedIndex].textContent} 期間内のアンケート件数: ${d.n_data}</a>
   </div>
   <div class=advice><mark-down>${d.advice}</mark-down></div>
   `;
     main.appendChild(div);
   }
 };
-show();
+
 selduring.onchange = () => show();
+await show();
+
+function scrollToHash() {
+  const hash = location.hash;
+  if (!hash) return;
+  const el = document.querySelector(hash);
+  if (el) {
+    el.scrollIntoView();
+    //el.scrollIntoView({ behavior: "smooth" }); // smoothは任意
+  }
+}
+
+//setTimeout(scrollToHash, 1000);
+scrollToHash();
 </script>
 
 <style>
