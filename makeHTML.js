@@ -43,7 +43,10 @@ for (const area of areas) {
     background-color: #f8faf8;
     margin: .5em;
   }
-  main h2 {
+  body > h1 {
+    text-align: left;
+  }
+  main > h2 {
     x-display: inline-block;
     padding-bottom: .3em;
     padding-right: 1em;
