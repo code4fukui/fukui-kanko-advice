@@ -64,6 +64,11 @@ for (const item of list) {
 }
 selduring.selectedIndex = selduring.length - 1;
 
+const fixContent = (text) => {
+  //return text;
+  return text.replace(/\n{2,}/g, "\n");
+};
+
 const show = async () => {
   const fn = selduring.value;
   const data = await (await fetch(fn)).json();
@@ -176,7 +181,7 @@ main > div {
 }
 .advice {
   padding: .9em;
-  white-space: pre-wrap;
+  x-white-space: pre-wrap;
 }
 #divarea a {
   margin-right: .5em;
