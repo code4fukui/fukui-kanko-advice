@@ -58,7 +58,6 @@ for (const area of areas) {
   }
   .advice {
     padding: .9em;
-    white-space: pre-wrap;
   }
   a {
     color: black !important;
