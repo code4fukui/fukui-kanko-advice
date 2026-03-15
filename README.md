@@ -1,289 +1,41 @@
-# 福井県観光AIアドバイス
+# Fukui Tourism AI Advice
 
-福井県の観光地事業者向けに、AI（GPT）を用いて自動的に生成される観光コンサルティングアドバイスシステムです。
+A system that generates professional AI-powered tourism consultation advice for tourism businesses in Fukui Prefecture, Japan.
 
-**ライブデモ：** https://code4fukui.github.io/fukui-kanko-advice/
+## Demo
+https://code4fukui.github.io/fukui-kanko-advice/
 
-## 概要
+## Features
+- **AI-Powered Analysis**: Uses GPT models to analyze survey data and generate professional tourism consulting advice
+- **Data-Driven Recommendations**: Bases all advice on actual visitor feedback collected through surveys
+- **Organized by Area & Time Period**: Generates separate advice for each tourism area and time period
+- **Interactive Web Interface**: Dynamic HTML pages allow browsing advice by prefecture region, city, and area
+- **Automated Documentation**: Automatically creates downloadable JSON files for all generated advice
 
-本プロジェクトは、OpenAIのGPT APIを活用して観光アンケート調査データを分析し、福井県の観光地事業者に対して**すぐに実行できる改善施策**を自動生成します。訪問者アンケートフィードバックをAIが統合し、プロフェッショナルで実践的なコンサルティングアドバイスを提供します。
+## Requirements
+- [Deno](https://deno.land/) JavaScript/TypeScript runtime
+- OpenAI API key
 
-### 主な機能
-
-- **AI による自動分析**: GPT（GPT-5.2）を使用してアンケート調査データを分析し、プロフェッショナルなアドバイスを生成
-- **データベース駆動**: 実際の来訪者フィードバックを基に、すべの改善提案を作成
-- **エリア別・期間別対応**: 各観光地ごと、調査期間ごとに異なるアドバイスを生成
-- **インタラクティブなWeb インターフェース**: エリア・市町村・期間で動的にアドバイスを検索・閲覧可能
-- **自動的なデータアーカイブ**: 生成されたアドバイスをJSON形式で自動保存
-
-## 仕組み
-
-1. **アンケート調査の実施**: [FTAS（福井県観光地アンケート調査）](https://github.com/code4fukui/fukui-kanko-survey)で来訪者フィードバックを集約
-2. **AIによる分析**: 各観光エリアの回答データをCSV形式にしてOpenAI APIに送信、プロンプトでコンサルティング視点の分析を指示
-3. **アドバイス生成**: GPTが具体的で実行可能な改善提案を優先順位付きで生成
-4. **HTML公開**: アドバイスを市町村・エリア別に整理したHTML ページとして公開
-5. **データ保存**: すべてのアドバイスをJSON形式で時系列に保存・アーカイブ
-
-## プロジェクト構成
-
-```
-├── index.html                 # メインのインタラクティブダッシュボード
-├── README.md                  # 日本語README（このファイル）
-├── README.en.md              # 英語README
-├── make.js                   # メインスクリプト：全エリアのアドバイスを生成
-├── makeList.js               # アドバイスファイルのインデックスを作成
-├── makeHTML.js               # 各エリアのHTMLページを生成
-├── fetchKankoAdvice.js       # OpenAI APIへの連携
-├── make.test.js              # テスト用スクリプト
-├── advice.json               # 最新のアドバイス出力（全エリア）
-├── advice-list.json          # すべてのアーカイブファイルのインデックス
-├── area/                     # 観光エリア別のHTMLページ
-│   ├── 1.html
-│   ├── 2.html
-│   └── ...
-└── data/                     # 過去に生成されたすべてのアドバイス（日付別）
-    ├── advice-2023-07-18.json
-    ├── advice-2024-01-02.json
-    └── ...
-```
-
-## システムコンポーネント
-
-### コアスクリプト
-
-#### `fetchKankoAdvice.js`
-OpenAI APIとの通信を管理します。CSVフォーマットのアンケートデータを受け取り、プロフェッショナルなプロンプトを構築して GPT に送信し、生成されたアドバイスを返します。コンテクスト容量に関するエラーが発生した場合は、自動的にデータセットを縮小して再試行します。
-
-```javascript
-const advice = await fetchKankoAdvice(surveyData);
-```
-
-#### `make.js`
-メインのオーケストレーションスクリプト。毎日実行されて以下を行います：
-- 観光エリアの定義と調査データを外部ソースから取得
-- 指定した期間（デフォルト：直近2週間）でアンケートデータを絞り込み
-- 新規回答があるエリアの新しいアドバイスを生成
-- アドバイスをJSONファイルと HTMLファイルとして出力
-- Deno ランタイムで実行
-
-設定項目：
-- `offset`: 過去の週を指定してアドバイスを生成（0～6で曜日、未指定でstartday/enddayを使用）
-- `days`: アンケートデータの集計対象期間（デフォルト：14日間）
-- `startday` / `endday`: オフセットの代わりに任意の日付範囲を指定
-
-#### `makeList.js`
-`data/` フォルダ内のすべてのアーカイブファイルのインデックス `advice-list.json` を作成します。日付順に並べ替えられます。
-
-#### `makeHTML.js`
-各観光エリア用に `area/` フォルダ内に個別の HTML ページを生成します。各ページには以下が表示されます：
-- そのエリアの全履歴アドバイス（最新順）
-- 該当するアンケート回答へのリンク
-- 各アドバイス生成時のタイムスタンプとデータ件数
-- プロフェッショナルなスタイリングと Markdown レンダリング
-
-#### `make.test.js`
-サンプルデータを用いたテスト・デモンストレーション。小規模なCSVデータセットでのAI分析を実際に試せます。
-
-### フロントエンド
-
-#### `index.html`
-インタラクティブダッシュボードの提供：
-- 市町村ごとに組織されたエリア選択ドロップダウン
-- 調査期間フィルター
-- アドバイスJSONからの動的コンテン ツ読み込み
-- [Find47ライブラリ](https://code4fukui.github.io/find47/Find47.js)との連携（福井県の画像取得）
-- 市町村別ナビゲーションショートカット
-- 関連統計・データソースへのリンク
-
-## データ出典
-
-**アンケートソース**: [FTASオープンデータ - 福井県観光地域アンケート調査](https://github.com/code4fukui/fukui-kanko-survey)
-- **データライセンス**: CC BY 福井県観光連盟
-- コンテンツ：観光地の定義、アンケート回答、来訪者属性、満足度データ
-- 継続的に新しい訪問者フィードバックで更新
-
-## AI モデルとプロンプト
-
-**現在のモデル**: GPT-5.2（コード内でGPT-4への切り替えもコメントで用意）
-
-**システムプロンプト**:
-> 「あなたはプロフェッショナルな観光コンサルです。下記のCSVデータを元にその観光地事業者に対するアドバイスを作成します。すぐに解決できる重要な改善点は何ですか？」
-
-AIが生成するアドバイスの特徴：
-- **すぐに実行可能** - 大規模な資本投資を必要としない
-- **優先順位付き** - 実現可能性と影響度でランク付け
-- **具体的** - ステップバイステップの実装方法を含む
-- **データに基づく** - 実際の来訪者フィードバックで根拠を示す
-- 通常は3～5つのメイン施策と補足施策で構成
-
-## アドバイス内容の例
-
-生成されるアドバイスの典型的な構成：
-1. **問題の根本原因** - 来訪者が不満を感じている本質
-2. **すぐできる施策** - 低コスト・高効果な改善
-3. **具体的な実装方法** - ステップバイステップの手順
-4. **期待される効果** - 改善後の満足度への影響
-5. **優先順位** - どの施策から着手すべきか
-
-扱われる主な課題例：
-- 公共交通の分かりにくさとナビゲーション
-- サイン・案内表示の改善
-- 飲食店・売店の価格表示の透明化
-- 営業時間の最適化
-- カスタマーサービス向上
-- 取扱商品・サービスの充実
-
-## システムの実行
-
-### 必要な環境
-
-- [Deno](https://deno.land/) JavaScript/TypeScript ランタイム
-- OpenAI API キー（環境変数に設定）
-- インターネット接続（API呼び出しとデータ取得用）
-
-### 基本的な使い方
-
+## Usage
 ```bash
-# 新規アンケート回答がある観光地の新たなアドバイスを生成
+# Generate new advice for areas with recent survey responses
 deno run --allow-net --allow-read --allow-write make.js
 
-# アドバイスのインデックスを作成・更新
+# Create/update the advice index
 deno run --allow-net --allow-read --allow-write makeList.js
 
-# 現在のアドバイスからHTMLページを生成
+# Generate HTML pages from current advice
 deno run --allow-net --allow-read --allow-write makeHTML.js
 
-# サンプルデータでAI アドバイス生成をテスト
+# Test the AI advice generation with sample data
 deno run --allow-net make.test.js
 ```
 
-### 設定
+## Data / API
+- Survey data from the [FTAS (Fukui Tourism Area Survey) Open Data](https://github.com/code4fukui/fukui-kanko-survey)
+- Advice generated using the OpenAI API
 
-`make.js` 内で以下をカスタマイズ可能：
-
-```javascript
-const offset = undefined;        // 特定の曜日（0～6）または undefined
-const days = 14;                 // アンケートデータの集計日数
-const startday = "2026-01-01";   // カスタム開始日
-const endday = "2026-01-31";     // カスタム終了日
-```
-
-### スケジュール実行
-
-定期的に `make.js` を実行するようにcron ジョブやスケジュールタスクを設定：
-
-```bash
-# 例：毎週水曜日午前9時に実行してアドバイスを生成
-0 9 * * 3 cd /path/to/fukui-kanko-advice && deno run --allow-net --allow-read --allow-write make.js
-```
-
-## データ構成
-
-### advice.json
-すべてのエリアの最新アドバイス（最新の実行時点）
-
-```json
-[
-  {
-    "area": "福井駅前 エリア",
-    "n_data": 66,
-    "startday": "2026-01-01",
-    "endday": "2026-01-31",
-    "advice": "## すぐに解決できる「重要な改善点」\n\n1) 問題...\n**解決策:**..."
-  },
-  ...
-]
-```
-
-### advice-list.json
-すべてのアーカイブファイルの日付範囲付きインデックス
-
-```json
-[
-  {
-    "fn": "data/advice-2025-08-19.json",
-    "startday": "2025-08-12",
-    "endday": "2025-08-19"
-  },
-  ...
-]
-```
-
-### area/ フォルダ
-各観光エリア用のHTMLページ（1.html～98.html のエリアID別命名）。該当エリアのすべての履歴アドバイスを表示します。
-
-### data/ フォルダ
-生成されたすべてのアドバイスの完全なアーカイブ（日付別）：
-- `advice-2023-07-18.json`（最古）
-- `advice-2025-08-19.json`（最新）
-- 生成実行ごとに1ファイル
-
-## 外部ライブラリ・サービス
-
-**JavaScriptライブラリ**:
-- `https://js.sabae.cc/CSV.js` - CSV解析と生成
-- `https://js.sabae.cc/ArrayUtil.js` - 配列操作ユーティリティ
-- `https://code4fukui.github.io/find47/Find47.js` - 都道府県情報取得（福井県対応）
-- `https://code4fukui.github.io/mark-down/mark-down.js` - Markdown レンダリング
-
-**API**:
-- [OpenAI API](https://openai.com/) - GPTモデルでアドバイス生成
-- [FTAS Survey API](https://github.com/code4fukui/fukui-kanko-survey) - アンケートデータソース
-
-**関連プロジェクト**:
-- [福井県観光アンケート分析アプリ](https://code4fukui.github.io/fukui-kanko-stat/) - アンケート分析の補助ツール
-
-## パフォーマンスとエラーハンドリング
-
-大規模データセットへの対応：
-
-```javascript
-// APIがコンテクスト超過エラーを返した場合、データセットを自動的に縮小して再試行
-if (res.startsWith("error: ")) {
-  data.splice(0, data.length / 2);  // 前半を削除
-  // より小さいデータセットで再試行
-}
-```
-
-この処理により、高容量のアンケートデータでもシステムが必要に応じて分割して処理できます。
-
-## 開発ノート
-
-### テスト
-
-`make.test.js` を実行して、サンプルデータでAIアドバイス生成をバリデーション：
-
-```bash
-deno run --allow-net make.test.js
-```
-
-合成されたアンケートフィードバックに基づいて、生成されたアドバイスが出力されます。
-
-### カスタマイズ
-
-- **AIプロンプトの変更**: `fetchKankoAdvice.js` でアドバイスのスタイルやフォーカス領域を変更
-- **時間窓の調整**: `make.js` で異なる期間のアドバイスを生成
-- **エリア定義の更新**: FTASソースデータを修正
-- **HTMLテンプレートの変更**: `makeHTML.js` でページスタイリングをカスタマイズ
-
-## ライセンス
-
-- **データソース**: CC BY 福井県観光連盟（[FTASプロジェクト](https://github.com/code4fukui/fukui-kanko-survey)）
-- **コード**: オープンソース（リポジトリで具体的なライセンスを確認）
-- **AI API**: OpenAI利用、規約に従う
-
-## 貢献
-
-本プロジェクトは[Code for Fukui](https://github.com/code4fukui)による、Code for Japanシビックテック活動の一部です。貢献方法：
-
-- GitHub でイシュー報告・提案
-- AIプロンプト改善によるアドバイス質向上
-- データビジュアライゼーション・UI改善
-- 他の都道府県への対応拡大
-
-## 参考リンク
-
-- **FTASオープンデータ**: https://github.com/code4fukui/fukui-kanko-survey
-- **ライブダッシュボード**: https://code4fukui.github.io/fukui-kanko-advice/
-- **ソースコード**: https://github.com/code4fukui/fukui-kanko-advice/
-- **関連統計ツール**: https://code4fukui.github.io/fukui-kanko-stat/
+## License
+- Data source: CC BY Fukui Tourism Association
+- Code: Open source (check repository for specific license)
+- AI API: Subject to OpenAI terms of use
