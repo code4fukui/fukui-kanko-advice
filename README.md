@@ -1,5 +1,7 @@
 # Fukui Tourism AI Advice
 
+> 日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
+
 A system that generates professional AI-powered tourism consultation advice for tourism businesses in Fukui Prefecture, Japan.
 
 ## Demo
