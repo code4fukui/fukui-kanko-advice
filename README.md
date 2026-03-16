@@ -10,7 +10,7 @@ https://code4fukui.github.io/fukui-kanko-advice/
 ## Features
 - **AI-Powered Analysis**: Uses GPT models to analyze survey data and generate professional tourism consulting advice
 - **Data-Driven Recommendations**: Bases all advice on actual visitor feedback collected through surveys
-- **Organized by Area & Time Period**: Generates separate advice for each tourism area and time period
+- **Organized by Area & Time Period**: Generates separate advice for each tourism area and time period  
 - **Interactive Web Interface**: Dynamic HTML pages allow browsing advice by prefecture region, city, and area
 - **Automated Documentation**: Automatically creates downloadable JSON files for all generated advice
 
