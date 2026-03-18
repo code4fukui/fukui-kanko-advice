@@ -1,41 +1,50 @@
-# 福井県観光AI アドバイス
+# 福井観光AIアドバイス
+English README is available here: [README.md](README.md)
 
-福井県の観光地事業者向けに、AIを用いて自動的に生成される観光コンサルティングアドバイスシステムです。
+日本福井県の観光業者向けに、プロフェッショナルなAIパワードツーリズムコンサルテーションアドバイスを生成するシステム。
 
 ## デモ
 https://code4fukui.github.io/fukui-kanko-advice/
 
 ## 機能
-- **AI による自動分析**: GPTを使用してアンケート調査データを分析し、プロフェッショナルなアドバイスを生成
-- **データベース駆動**: 実際の来訪者フィードバックを基に、すべての改善提案を作成
-- **エリア別・期間別対応**: 各観光地ごと、調査期間ごとに異なるアドバイスを生成
-- **インタラクティブなWebインターフェース**: エリア・市町村・期間で動的にアドバイスを検索・閲覧可能
-- **自動的なデータアーカイブ**: 生成されたアドバイスをJSON形式で自動保存
+- **AIパワーの分析**: GPTモデルを使用して調査データを分析し、専門的な観光コンサルティングアドバイスを生成します
+- **データに基づいた提案**: 調査で収集された実際の訪問者フィードバックに基づいて、すべてのアドバイスを提供します
+- **エリアと期間別に整理**: 各観光エリアと期間ごとにアドバイスを個別に生成します
+- **対話型Webインターフェイス**: 都道府県、市、エリア別にアドバイスを閲覧できる動的HTMLページを提供します
+- **自動ドキュメンテーション**: 生成されたすべてのアドバイスについて、ダウンロード可能なJSONファイルを自動的に作成します
 
-## 必要環境
-- [Deno](https://deno.land/) JavaScript/TypeScript runtime
-- OpenAI API key
+## 要件
+- [Deno](https://deno.land/)のJavaScript/TypeScript実行環境
+- OpenAIのAPIキー
 
-## 使い方
+## 使用法
 ```bash
-# 新しい回答データからアドバイスを生成
+# 最近のアンケート回答のある地域の新しいアドバイスを生成する
 deno run --allow-net --allow-read --allow-write make.js
 
-# アドバイスのインデックスを作成/更新
+# アドバイスのインデックスを作成/更新する
 deno run --allow-net --allow-read --allow-write makeList.js
 
-# 現在のアドバイスからHTMLページを生成
+# 現在のアドバイスからHTMLページを生成する
 deno run --allow-net --allow-read --allow-write makeHTML.js
 
-# サンプルデータでAIアドバイス生成をテスト
+# サンプルデータを使ってAIアドバイス生成をテストする
 deno run --allow-net make.test.js
 ```
 
-## データ・API
-- アンケートデータ: [FTASオープンデータ - 福井県観光地域アンケート調査](https://github.com/code4fukui/fukui-kanko-survey)
-- アドバイス生成: OpenAI API
+## データ / API
+- [FTAS (Fukui Tourism Area Survey) オープンデータ](https://github.com/code4fukui/fukui-kanko-survey)からのサーベイデータ
+- OpenAI APIを使って生成されたアドバイス
+
+以下のREADMEマークダウンチャンクを英語から日本語に翻訳します。
+ルール:
+- 同じマークダウン構造、見出しレベル、リスト、およびセクションの順序を保持します。
+- すべてのリンクとURLを正確に保持します。
+- コードブロックを完全に保持します(コードを翻訳しません)。
+- 文章を落とすことはありません。
+- マークダウンのみを出力します。
+
+日本語マークダウンチャンク:
 
 ## ライセンス
-- データソース: CC BY Fukui Tourism Association 
-- コード: オープンソース (リポジトリ内のライセンスを確認)
-- AI API: OpenAIの利用規約に準拠
+このプロジェクトは [MIT License](LICENSE) のもとで公開されています。

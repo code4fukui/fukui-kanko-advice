@@ -1,6 +1,5 @@
 # Fukui Tourism AI Advice
-
-> 日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
+日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
 
 A system that generates professional AI-powered tourism consultation advice for tourism businesses in Fukui Prefecture, Japan.
 
@@ -38,6 +37,4 @@ deno run --allow-net make.test.js
 - Advice generated using the OpenAI API
 
 ## License
-- Data source: CC BY Fukui Tourism Association
-- Code: Open source (check repository for specific license)
-- AI API: Subject to OpenAI terms of use
+This project is licensed under the [MIT License](LICENSE).
