@@ -37,4 +37,5 @@ deno run --allow-net make.test.js
 - Advice generated using the OpenAI API
 
 ## License
+- Data source: CC BY Fukui Tourism Association
 This project is licensed under the [MIT License](LICENSE).
