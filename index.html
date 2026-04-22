@@ -83,6 +83,10 @@ const show = async () => {
   for (const d of data) {
     const div = document.createElement("div");
     const area = areas.find(a => a.エリア名 == d.area);
+    if (!area) {
+      console.log("area not found", d.area);
+      continue;
+    }
     const id = area.id;
     const city = area.市町名;
     if (citybk != city) {
