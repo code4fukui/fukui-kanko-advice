@@ -32,6 +32,8 @@ import { Find47 } from "https://code4fukui.github.io/find47/Find47.js";
 
 const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
 const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
+const areasById = new Map(areas.map(area => [String(area.id), area]));
+const areasByName = new Map(areas.map(area => [area.エリア名, area]));
 console.log(areas, areas.length);
 const cities = ArrayUtil.toUnique(areas.map(a => a.市町名));
 for (const city of cities) {
@@ -75,14 +77,17 @@ const fixContent = (text) => {
 const show = async () => {
   const fn = selduring.value;
   const data = await (await fetch(fn)).json();
-  const d = data[0];
   main.innerHTML = "";
   //console.log(d);
   //divduring.innerHTML = d.startday + "〜" + d.endday;
   let citybk = null;
   for (const d of data) {
     const div = document.createElement("div");
-    const area = areas.find(a => a.エリア名 == d.area);
+    const area = areasById.get(String(d.area_id)) || areasByName.get(d.area);
+    if (!area) {
+      console.log("area not found", d.area);
+      continue;
+    }
     const id = area.id;
     const city = area.市町名;
     if (citybk != city) {
@@ -102,7 +107,10 @@ const show = async () => {
   }
 };
 
-selduring.onchange = () => show();
+selduring.onchange = async () => {
+  await show();
+  scrollToHashLater();
+};
 await show();
 
 function scrollToHash() {
@@ -115,8 +123,15 @@ function scrollToHash() {
   }
 }
 
-//setTimeout(scrollToHash, 1000);
-scrollToHash();
+function scrollToHashLater() {
+  requestAnimationFrame(() => {
+    scrollToHash();
+    setTimeout(scrollToHash, 500);
+  });
+}
+
+globalThis.addEventListener("hashchange", scrollToHashLater);
+scrollToHashLater();
 </script>
 
 <style>

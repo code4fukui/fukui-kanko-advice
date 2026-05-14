@@ -6,22 +6,25 @@ for (const item of list) {
   item.data = await (await fetch(new URL(item.fn, import.meta.url))).json();
 }
 
+const cleanup = (s) => String(s).replace(/[ \t]+$/gm, "");
+
 const areas0 = await CSV.fetchJSON("https://code4fukui.github.io/fukui-kanko-survey/area.csv");
 const areas = areas0.filter(a => a.通し番号).sort((a, b) => a.通し番号 - b.通し番号);
 console.log(areas);
 for (const area of areas) {
+  const area_id = String(area.id);
   const res = [];
   res.push(`<h2>${area.市町名 + " / " + area.エリア名}</h2>`);
 
   for (const item of list) { // 最新が先
   //for (let i = list.length - 1; i >= 0; i--) { // 最新が後
     //const item = list[i];
-    const d = item.data.find(d => d.area == area.エリア名);
+    const d = item.data.find(d => String(d.area_id) == area_id) || item.data.find(d => d.area == area.エリア名);
     if (d) {
       res.push(
         `<h3>${d.startday}〜${d.endday}</h3>
         <a href=https://code4fukui.github.io/fukui-kanko-stat/comment.html#${area.id},0,0,0>アンケート回答件数: ${d.n_data}</a><br>
-        <div class=advice><mark-down>${d.advice}</mark-down></div>`
+        <div class=advice><mark-down>${cleanup(d.advice)}</mark-down></div>`
       );
     }
   }
