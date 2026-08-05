@@ -258,5 +258,10 @@
     "fn": "data/advice-2026-06-30.json",
     "startday": "2026-06-01",
     "endday": "2026-06-30"
+  },
+  {
+    "fn": "data/advice-2026-07-31.json",
+    "startday": "2026-07-01",
+    "endday": "2026-07-31"
   }
 ]
